@@ -7,6 +7,7 @@
     <style>
         *{margin:0;padding:0}
         .banner{
+            margin: 10px auto;
             width: 320px;
             height: 140px;
             overflow: hidden;
@@ -21,6 +22,16 @@
 </head>
 <body>
 <slider class="banner">
+    <slider-item><img src="1.png" alt=""></slider-item>
+    <slider-item><img src="2.png" alt=""></slider-item>
+    <slider-item><img src="3.png" alt=""></slider-item>
+</slider>
+<slider class="banner" :auto-interval="5000" :speed="600">
+    <slider-item><img src="1.png" alt=""></slider-item>
+    <slider-item><img src="2.png" alt=""></slider-item>
+    <slider-item><img src="3.png" alt=""></slider-item>
+</slider>
+<slider class="banner" :auto="false" :speed="1000" :show-indicators="false">
     <slider-item><img src="1.png" alt=""></slider-item>
     <slider-item><img src="2.png" alt=""></slider-item>
     <slider-item><img src="3.png" alt=""></slider-item>
