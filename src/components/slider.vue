@@ -1,9 +1,9 @@
 <template>
-    <div v-el:wrap @touchstart="start" @touchmove="move" @touchend="end" @transitionend="transitionend" class="slider-wrap">
+    <div v-el:wrap @touchstart="start" @touchmove="move" @touchend="end" @transitionend="transitionEnd" class="slider-wrap">
         <div class="slider-content" :style="contStyle">
             <slot></slot>
         </div>
-        <div class="slider-points" v-show="showPoints">
+        <div class="slider-points" v-show="showIndicators">
             <span class="point" v-for="page in pages" :class="{on: $index == currentIndex}"></span>
         </div>
     </div>
@@ -11,8 +11,6 @@
 <style lang="less">
     .slider-wrap{
         position: relative;
-        width: 100%;
-        height: 100%;
         overflow: hidden;
         .slider-content{
             position: relative;
@@ -62,12 +60,29 @@
                 currentIndex: 0,
                 currentX: 0,
                 wrapWidth: 0,
-                childLength: 0
+                childLength: 0,
+                scrolling: false,
+                timer: null
+            }
+        },
+
+        props: {
+            auto: {
+                type: Boolean,
+                default: true
+            },
+            showIndicators: {
+                type: Boolean,
+                default: true
+            },
+            autoInterval: {
+                type: Number,
+                default: 3000
             }
         },
         methods:{
             start: function(e){
-                if(this.childLength <= 1){
+                if(this.childLength <= 1 || this.scrolling){
                     return;
                 }
                 e.preventDefault();
@@ -81,6 +96,7 @@
                 if(!this.touchObj.touchState){
                     return;
                 }
+                this.auto && this.stopPlay();
                 var touch = e.touches[0];
                 this.touchObj.moveX = touch.pageX - this.touchObj.startX;
                 if(Math.abs(this.touchObj.moveX)>=5){
@@ -114,29 +130,43 @@
                         this.currentIndex -= direction;
                     }
                 }
+                this.scrolling = true;
                 this.currentX = direction * this.wrapWidth;
                 this.contStyle = '-webkit-transform: translate3d('+this.currentX+'px, 0, 0);-webkit-transition: transform 300ms ease';
             },
-            transitionend: function(){
+            transitionEnd: function(){
                 this.childStyle();
                 this.contStyle = '';
+                this.scrolling = false;
+                !this.timer && this.auto && this.autoPlay();
             },
             childStyle: function(status){
                 var child = this.$children;
                 for(var i = 0; i < this.childLength; i++){
-                    child[i].$el.style = ''
+                    child[i].$el.style.zIndex = '';
+                    child[i].$el.style.webkitTransform = '';
                 }
                 var prev = this.currentIndex === 0 ? this.childLength - 1 : this.currentIndex - 1,
                     next = this.currentIndex === this.childLength - 1 ? 0 : this.currentIndex + 1;
-                child[this.currentIndex].$el.style = 'z-index: 2';
+                child[this.currentIndex].$el.style.zIndex = '2';
                 if(status == 'next'){
-                    child[next].$el.style = '-webkit-transform: translate3d(100%, 0, 0)';
+                    child[next].$el.style.webkitTransform = 'translate3d(100%, 0, 0)';
                 }else if(status == 'prev'){
-                    child[prev].$el.style = '-webkit-transform: translate3d(-100%, 0, 0)';
+                    child[prev].$el.style.webkitTransform = 'translate3d(-100%, 0, 0)';
                 }else{
-                    child[prev].$el.style = '-webkit-transform: translate3d(-100%, 0, 0)';
-                    child[next].$el.style = '-webkit-transform: translate3d(100%, 0, 0)';
+                    child[prev].$el.style.webkitTransform = 'translate3d(-100%, 0, 0)';
+                    child[next].$el.style.webkitTransform = 'translate3d(100%, 0, 0)';
                 }
+            },
+            autoPlay: function(){
+                this.timer = setInterval(function(){
+                    this.currentIndex = (this.currentIndex + 1 >= this.childLength) ? 0 : this.currentIndex + 1;
+                    this.contStyle = '-webkit-transform: translate3d('+(-1*this.wrapWidth)+'px, 0, 0);-webkit-transition: transform 300ms ease';
+                }.bind(this), this.autoInterval)
+            },
+            stopPlay: function(){
+                clearInterval(this.timer);
+                this.timer = null;
             }
         },
         ready: function(){
@@ -145,8 +175,9 @@
             this.wrapWidth = wrapDom.clientWidth;
             this.childLength = child.length;
             this.childStyle();
-            this.showPoints = true;
             this.pages = this.childLength;
+
+            this.auto && this.autoPlay();
         }
     }
 </script>

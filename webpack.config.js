@@ -17,14 +17,6 @@ module.exports = {
     module: {
         loaders:[
         {
-            test: /\.(jpe?g|gif|png)$/,
-            loader: 'url-loader?limit=100000'
-        },
-        {
-            test: /\.woff|\.woff2|\.svg|.eot|\.ttf/,
-            loader: 'url?prefix=font/&limit=10000'
-        },
-        {
             test: /\.js$/,
             exclude: /(node_modules)/,
             loader: 'babel?presets[]=es2015'
@@ -43,8 +35,15 @@ module.exports = {
             loader:ExtractTextPlugin.extract("style-loader?sourceMap", "css-loader?sourceMap!less-loader?sourceMap")
         }]
     },
+    vue: {
+        loaders: {
+            less: ExtractTextPlugin.extract('vue-style-loader', 'css!less')
+        }
+    },
     plugins: [
-        new ExtractTextPlugin("slider.css")
+        new ExtractTextPlugin("slider.css", {
+            allChunks: true
+        })
     ],
     resolve: {
         //开启后缀自动补全功能

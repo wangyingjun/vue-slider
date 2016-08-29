@@ -1,0 +1,39 @@
+.slider-wrap {
+  position: relative;
+  overflow: hidden;
+}
+.slider-wrap .slider-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.slider-wrap .slider-item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  font-size: 40px;
+  text-align: center;
+  background: #ddd;
+}
+.slider-wrap .slider-points {
+  position: absolute;
+  z-index: 3;
+  bottom: 10px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%);
+}
+.slider-wrap .slider-points .point {
+  width: 8px;
+  height: 8px;
+  display: inline-block;
+  border-radius: 100%;
+  background: #000;
+  opacity: .2;
+  margin: 0 3px;
+}
+.slider-wrap .slider-points .on {
+  background: #fff;
+}
