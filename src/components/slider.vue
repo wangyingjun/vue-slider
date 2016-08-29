@@ -78,6 +78,10 @@
             autoInterval: {
                 type: Number,
                 default: 3000
+            },
+            speed: {
+                type: Number,
+                default: 300
             }
         },
         methods:{
@@ -132,7 +136,7 @@
                 }
                 this.scrolling = true;
                 this.currentX = direction * this.wrapWidth;
-                this.contStyle = '-webkit-transform: translate3d('+this.currentX+'px, 0, 0);-webkit-transition: transform 300ms ease';
+                this.contStyle = '-webkit-transform: translate3d('+this.currentX+'px, 0, 0);-webkit-transition: transform '+this.speed+'ms ease';
             },
             transitionEnd: function(){
                 this.childStyle();
@@ -161,7 +165,7 @@
             autoPlay: function(){
                 this.timer = setInterval(function(){
                     this.currentIndex = (this.currentIndex + 1 >= this.childLength) ? 0 : this.currentIndex + 1;
-                    this.contStyle = '-webkit-transform: translate3d('+(-1*this.wrapWidth)+'px, 0, 0);-webkit-transition: transform 300ms ease';
+                    this.contStyle = '-webkit-transform: translate3d('+(-1*this.wrapWidth)+'px, 0, 0);-webkit-transition: transform '+this.speed+'ms ease';
                 }.bind(this), this.autoInterval)
             },
             stopPlay: function(){
