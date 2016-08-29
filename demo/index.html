@@ -7,16 +7,27 @@
     <style>
         *{margin:0;padding:0}
         .banner{
-            width: 200px;
-            height: 100px;
-            margin: 100px auto;
+            width: 320px;
+            height: 140px;
+            overflow: hidden;
+        }
+        .banner img{
+            display: block;
+            width: 100%;
+            height: 100%;
         }
     </style>
 </head>
 <body>
     <div class="banner">
-        <slider></slider>
+        <slider>
+            <slider-item><img src="1.png" alt=""></slider-item>
+            <slider-item><img src="2.png" alt=""></slider-item>
+            <slider-item><img src="3.png" alt=""></slider-item>
+        </slider>
     </div>
-<script src="../build/index.js"></script>
+<script src="../node_modules/vue/dist/vue.js"></script>
+<script src="../build/slider.js"></script>
+<script src="demo.js"></script>
 </body>
 </html>

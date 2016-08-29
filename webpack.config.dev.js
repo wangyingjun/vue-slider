@@ -3,16 +3,11 @@ var path = require('path');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 module.exports = {
     entry: {
-        slider: [path.join(__dirname, './src/index.js')]
+        index: [path.join(__dirname, './demo/demo.js')]
     },
     output: {
-        library: 'VueSlider',
-        libraryTarget: 'umd',
         path: __dirname+'/build/',
         filename: '[name].js'
-    },
-    externals: {
-        "vue": "vue"
     },
     module: {
         loaders:[
@@ -44,7 +39,7 @@ module.exports = {
         }]
     },
     plugins: [
-        new ExtractTextPlugin("slider.css")
+        new ExtractTextPlugin("styles.css")
     ],
     resolve: {
         //开启后缀自动补全功能
